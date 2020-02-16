@@ -14,7 +14,7 @@
                ref="loginFormRef">
         <el-form-item prop="user">
           <el-input prefix-icon="el-icon-user"
-                    v-model="loginForm.user"></el-input>
+                    v-model="loginForm.username"></el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input prefix-icon="el-icon-lock"
@@ -35,16 +35,13 @@
 <script>
 export default {
   data () {
-    // eslint-disable-next-line no-unused-vars
     const usernameRule = (rule, value, callback) => {
-      console.log(this.loginForm.user)
-      if (this.loginForm.user === '' || typeof (this.loginForm.user) === 'undefined') {
+      if (this.loginForm.username === '' || typeof (this.loginForm.username) === 'undefined') {
         callback(new Error('请输入用户名'))
       } else {
         callback()
       }
     }
-    // eslint-disable-next-line no-unused-vars
     const passwordRule = (rule, value, callback) => {
       if (this.loginForm.password === '') {
         callback(new Error('请输入密码'))
@@ -55,10 +52,7 @@ export default {
       }
     }
     return {
-      loginForm: {
-        user: '',
-        password: ''
-      },
+      loginForm: {},
       loginFormRule: {
         user: [
           { validator: usernameRule, trigger: 'blur' }
@@ -72,8 +66,25 @@ export default {
   },
   methods: {
     submit: function () {
-      this.$refs.loginFormRef.validate(valid => {
-        console.log(valid)
+      // 因为validate没有传第二个参数（函数）的话，返回是异步的，所以需要在函数前用async与awaite修饰
+      this.$refs.loginFormRef.validate(async valid => {
+        // 用validate在发送登陆请求前再一次利用表单进行验证规则，如果验证失败则返回空
+        if (!valid) return
+        // 将返回数据中的data属性解构
+        const { data: res } = await this.$http.post('login', this.loginForm)
+        if (res.meta.status !== 200) {
+          this.$message({
+            message: '登陆失败',
+            type: 'warning'
+          })
+        } else {
+          this.$message({
+            message: '登陆成功',
+            type: 'success'
+          })
+          window.sessionStorage.setItem('token', res.data.token)
+          this.$router.push('/home')
+        }
       })
     },
     reset: function () {
