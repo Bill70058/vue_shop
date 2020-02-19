@@ -1,8 +1,12 @@
 html,
 body,
 #app {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.el-breadcrumb {
+  margin-bottom: 15px !important;
 }
