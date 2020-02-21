@@ -27,13 +27,13 @@ const routes = [{
   }, {
     path: '/users',
     component: User
+  }, {
+    path: '/roles',
+    component: Roles
+  }, {
+    path: '/rights',
+    component: AuthorityList
   }]
-}, {
-  path: '/roles',
-  component: Roles
-}, {
-  path: '/rights',
-  component: AuthorityList
 }
 ]
 

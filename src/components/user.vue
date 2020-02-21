@@ -75,7 +75,7 @@
             </el-tooltip>
             <el-tooltip effect="dark" content="setting" placement="top" :enterable="false">
               <!-- 设置按钮 -->
-            <el-button type="warning" icon="el-icon-s-tools" circle size="mini"></el-button>
+            <el-button type="warning" icon="el-icon-s-tools" circle size="mini" @click="settingRole(scope.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -100,6 +100,18 @@
         </div>
       </el-dialog>
 
+      <!-- 设置用户权限对话框 -->
+      <el-dialog title="设置权限" :visible.sync="roleDialogVisible">
+        <p>当前用户：{{this.userInfo.username}}</p>
+        <p>当前角色：{{this.userInfo.role_name}}</p>
+        <el-select v-model="selectRole" placeholder="设置角色">
+          <el-option v-for="item in roleList" :key="item.id" :value="item.id" :label="item.roleName"></el-option>
+        </el-select>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="confirmRole('cancel')">取 消</el-button>
+          <el-button type="primary" @click="confirmRole()">确 定</el-button>
+        </div>
+      </el-dialog>
       <!-- 分页 -->
       <el-pagination
       @size-change="handleSizeChange"
@@ -127,8 +139,12 @@ export default {
       total: 0,
       userList: [],
       userId: 0, // 用户id
+      userInfo: '', // 设置权限时用户信息
+      selectRole: '', // 设置权限时选择的权限
+      roleList: [], // 角色列表
       dialogFormVisible: false, // 新增用户表单显示属性
       editFormVisible: false, // 编辑用户表单显示属性
+      roleDialogVisible: false, // 设置权限对话框显示属性
       addForm: {},
       editForm: {},
       addFormRule: {
@@ -161,6 +177,7 @@ export default {
     this.getUserList()
   },
   methods: {
+    // 获取用户列表
     getUserList: async function () {
       const { data: res } = await this.$http.get('users', {
         params: this.getUserInfo
@@ -235,11 +252,35 @@ export default {
         this.$message.success(res.meta.msg)
       }
       this.getUserList()
+    },
+    // 设置用户权限
+    settingRole: function (role) {
+      this.userInfo = role
+      this.getRole()
+      this.roleDialogVisible = true
+    },
+    // 用户权限确认事件
+    confirmRole: async function (msg) {
+      if (msg === 'cancel') return this.roleDialogVisible = false
+      if (!this.selectRole) return this.$message.error('请选择分配的角色')
+      const { data: res } = await this.$http.put(`users/${this.userInfo.id}/role`, { rid: this.selectRole })
+      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+      this.$message.success(res.meta.msg)
+      this.getUserList()
+      this.roleDialogVisible = false
+    },
+    // 获取权限列表
+    getRole: async function () {
+      const { data: res } = await this.$http.get('roles')
+      this.roleList = res.data
     }
   },
   watch: {
     dialogFormVisible (newData, oldData) {
       if (!newData) this.$refs.addFormRef.resetFields()
+    },
+    roleDialogVisible (newData, oldData) {
+      if (!newData) this.selectRole = ''
     }
   }
 }
