@@ -4,6 +4,7 @@ import router from './router'
 import './plugins/element.js'
 import './assets/css/global.css'
 import './assets/css/iconfont.css'
+import TreeTable from 'vue-table-with-tree-grid'
 // eslint-disable-next-line no-unused-vars
 import axios from 'axios'
 // 全局挂载axios
@@ -19,7 +20,7 @@ axios.interceptors.request.use(config => {
   return config
 })
 Vue.config.productionTip = false
-
+Vue.component('tree-table', TreeTable)
 new Vue({
   router,
   render: h => h(App)
