@@ -50,7 +50,8 @@
           <template slot-scope="scope">
             <el-button class="el-icon-edit"
                        type="primary"
-                       size="mini"></el-button>
+                       size="mini"
+                       @click="editGoods(scope.row)"></el-button>
             <el-button class="el-icon-delete"
                        type="danger"
                        size="mini"
@@ -69,6 +70,32 @@
                      :total="total">
       </el-pagination>
     </el-card>
+
+    <el-dialog :visible.sync="editDialogForm"
+               title="编辑货物信息"
+               width="50%">
+      <el-form :model="editFormData"
+               ref="editFormb">
+        <el-form-item label="商品名称">
+          <el-input v-model="editFormData.goods_name"></el-input>
+        </el-form-item>
+        <el-form-item label="价格">
+          <el-input v-model="editFormData.goods_price"></el-input>
+        </el-form-item>
+        <el-form-item label="数量">
+          <el-input v-model="editFormData.goods_number"></el-input>
+        </el-form-item>
+        <el-form-item label="重量">
+          <el-input v-model="editFormData.goods_weight"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer"
+           class="dialog-footer">
+        <el-button @click="editDialogForm = false">取 消</el-button>
+        <el-button type="primary"
+                   @click="editIncident()">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -82,6 +109,23 @@ export default {
         query: '',
         pagesize: 5,
         pagenum: 1
+      },
+      editId: 0,
+      editFormData: [],
+      editDialogForm: false,
+      editRule: {
+        goods_name: [
+          { required: true, message: '请输入商品名称', trigger: 'blur' }
+        ],
+        goods_price: [
+          { required: true, message: '请输入商品价格', trigger: 'blur' }
+        ],
+        goods_number: [
+          { required: true, message: '请输入商品数量', trigger: 'blur' }
+        ],
+        goods_weight: [
+          { required: true, message: '请输入商品重量', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -132,6 +176,28 @@ export default {
           type: 'info',
           message: '已取消删除'
         })
+      })
+    },
+    editGoods: async function (row) {
+      const { data: res } = await this.$http.get(`goods/${row.goods_id}`)
+      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+      this.editId = row.goods_id
+      this.editFormData = {
+        goods_name: res.data.goods_name,
+        goods_price: res.data.goods_price,
+        goods_number: res.data.goods_number,
+        goods_weight: res.data.goods_weight,
+        goods_introduce: res.data.goods_introduce,
+        pics: res.data.pics,
+        attrs: res.data.attrs
+      }
+      this.editDialogForm = true
+    },
+    editIncident: function () {
+      this.$refs.editForm.validate(async valid => {
+        if (!valid) return null
+        const { data: res } = await this.$http.put(`goods/${this.editId}`, this.editFormData)
+        console.log(res)
       })
     },
     add: function () {
