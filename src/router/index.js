@@ -1,17 +1,30 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from '../components/login.vue'
-import Home from '../components/home.vue'
-import Welcome from '../components/home_welcome'
-import User from '../components/user'
-import AuthorityList from '../components/authority/authorityList'
-import Roles from '../components/authority/roles'
-import Cate from '../components/goods/cate'
-import Goods from '../components/goods/goods'
-import Params from '../components/goods/params'
-import Add from '../components/goods/add'
-import Orders from '../components/order'
-import Reports from '../components/reports'
+
+// import Login from '../components/login.vue'
+const Login = () => import(/* webpackChunkName: "group-login-home-welcome" */ '../components/login.vue')
+// import Home from '../components/home.vue'
+const Home = () => import(/* webpackChunkName: "group-login-home-welcome" */ '../components/home.vue')
+// import Welcome from '../components/home_welcome'
+const Welcome = () => import(/* webpackChunkName: "group-login-home-welcome" */ '../components/home_welcome')
+// import User from '../components/user'
+const User = () => import(/* webpackChunkName: "group-user-authorityList-roles" */ '../components/user')
+// import AuthorityList from '../components/authority/authorityList'
+const AuthorityList = () => import(/* webpackChunkName: "group-user-authorityList-roles" */ '../components/authority/authorityList')
+// import Roles from '../components/authority/roles'
+const Roles = () => import(/* webpackChunkName: "group-user-authorityList-roles" */ '../components/authority/roles')
+// import Cate from '../components/goods/cate'
+const Cate = () => import(/* webpackChunkName: "group-cate-goods" */ '../components/goods/cate')
+// import Goods from '../components/goods/goods'
+const Goods = () => import(/* webpackChunkName: "group-cate-goods" */ '../components/goods/goods')
+// import Params from '../components/goods/params'
+const Params = () => import(/* webpackChunkName: "group-params-add" */ '../components/goods/params')
+// import Add from '../components/goods/add'
+const Add = () => import(/* webpackChunkName: "group-params-add" */ '../components/goods/add')
+// import Orders from '../components/order'
+const Orders = () => import(/* webpackChunkName: "group-orders-reports" */ '../components/order')
+// import Reports from '../components/reports'
+const Reports = () => import(/* webpackChunkName: "group-orders-reports" */ '../components/reports')
 Vue.use(VueRouter)
 
 const routes = [{

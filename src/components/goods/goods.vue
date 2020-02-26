@@ -149,7 +149,6 @@ export default {
     },
     // 搜索
     searchIncident: function () {
-      console.log(this.queryInfo)
       this.getTableData()
     },
     // 删除货品
@@ -197,7 +196,6 @@ export default {
       this.$refs.editForm.validate(async valid => {
         if (!valid) return null
         const { data: res } = await this.$http.put(`goods/${this.editId}`, this.editFormData)
-        console.log(res)
       })
     },
     add: function () {

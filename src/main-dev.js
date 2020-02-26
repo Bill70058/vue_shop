@@ -6,6 +6,10 @@ import './assets/css/global.css'
 import './assets/css/iconfont.css'
 import TreeTable from 'vue-table-with-tree-grid'
 
+// 进度条导入
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 // 富文本编辑器依赖导入
 import VueQuillEditor from 'vue-quill-editor'
 
@@ -22,9 +26,14 @@ axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'
 
 // 配置请求拦截
 axios.interceptors.request.use(config => {
+  NProgress.start()
   // 将token与需求字段添加到请求头中
   config.headers.Authorization = window.sessionStorage.getItem('token')
   // 最后必须将请求的资源返回，返回config
+  return config
+})
+axios.interceptors.response.use(config => {
+  NProgress.done()
   return config
 })
 Vue.config.productionTip = false
