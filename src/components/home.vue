@@ -6,7 +6,7 @@
         <div id="header">
           <img src="../assets/home_header.png"
                alt="系统图标">
-          <span>后台管理系统</span>
+          <span style="color:black">后台管理系统</span>
         </div>
         <div id="buts">
           <el-button @click="logout">退出</el-button>
@@ -19,8 +19,8 @@
           <div id="shrink"
                @click="changeShrink()"><span>||||</span></div>
           <el-menu class="el-menu-vertical-demo"
-                   background-color="#545c64"
-                   text-color="#fff"
+                   background-color="#fff"
+                   text-color="#000"
                    active-text-color="#ffd04b"
                    unique-opened
                    :collapse="isShrink"
@@ -42,7 +42,9 @@
           </el-menu>
         </el-aside>
         <!-- 主内容区 -->
-        <el-main><router-view></router-view></el-main>
+        <el-main>
+          <router-view></router-view>
+        </el-main>
       </el-container>
     </el-container>
   </div>
@@ -100,7 +102,7 @@ export default {
   width: 100%;
 }
 .el-header {
-  background-color: #b3c0d1;
+  background-color: #fff;
   color: #333;
   text-align: center;
   line-height: 60px;
@@ -129,7 +131,8 @@ export default {
 }
 
 .el-aside {
-  background-color: rgb(84, 92, 100);
+  box-shadow: 0px 5px 5px black;
+  background-color: #fff;
   color: #333;
   text-align: center;
   height: 100%;
@@ -140,8 +143,8 @@ export default {
     color: #fff;
     height: 20px;
     line-height: 20px;
-    background: gray;
-    span{
+    background: #dcdfe6;
+    span {
       font-size: 5px;
     }
   }
@@ -153,6 +156,7 @@ export default {
 .el-main {
   background-color: #e9eef3;
   color: #333;
+  border: 1px solid #add5ff;
 }
 .el-container {
   height: 100%;

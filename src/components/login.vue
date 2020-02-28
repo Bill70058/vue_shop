@@ -19,7 +19,8 @@
         <el-form-item prop="password">
           <el-input prefix-icon="el-icon-lock"
                     v-model="loginForm.password"
-                    type="password"></el-input>
+                    type="password"
+                    @keyup.enter.native="submit()"></el-input>
         </el-form-item>
         <!-- 登陆按钮 -->
         <div class="btns">
